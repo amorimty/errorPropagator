@@ -1,1 +1,1 @@
-Personal project for propagatin errors in physics lab classes
+Personal project for propagating errors in physics lab classes
