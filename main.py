@@ -9,6 +9,23 @@ isLoaded = load_dotenv()
 path = os.getenv("KERNEL_PATH")
 multiVarFunc = os.getenv("MULTIVAR_FUNC")
 
+var = []
+
+print("Enter how many variables you need than type 0:")
+
+isActive = 1
+
+while isActive != 0:
+
+    temp = input("var of number {0}: ".format(isActive))
+
+    if temp == "0":
+        isActive = 0
+    else:
+        var.append(temp)
+        isActive += 1
+
+print(var)
 # start session
 session = WolframLanguageSession(path)
 
