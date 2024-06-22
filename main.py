@@ -7,9 +7,16 @@ isLoaded = load_dotenv()
 
 # get kernel path and the function to be evaluated
 path = os.getenv("KERNEL_PATH")
-multiVarFunc = os.getenv("MULTIVAR_FUNC")
 
-var = []
+# start session
+session = WolframLanguageSession(path)
+
+multiVarFunc = "f[]:="
+
+variables = []
+variablesValues = []
+variablesErr = []
+variablesNumber = 0
 
 print("Enter how many variables you need than type 0:")
 
@@ -17,25 +24,41 @@ isActive = 1
 
 while isActive != 0:
 
-    temp = input("var of number {0}: ".format(isActive))
+    print("Choose an option:\n")
+    print("Insert expression --------- 0\n")
+    print("Insert variables  --------- 1\n")
+    print("Calculate         --------- 2\n")
+    print("exit              --------- 3\n")
+    temp = input("R.: ")
+    
+    match temp:
+        case "0": 
+            temp0 = input("\n\nInsert your expression: ")
+            multiVarFunc += temp0
+        case "1":
+            temp1 = 1
+            while temp1 != 0:
+                variables.append(input("var number {0}: ".format(temp1)))
+                variablesValues.append(input("value of var number {0}: ".format(temp1)))
+                variablesErr.append(input("error associated to var number {0}: ".format(temp1)))
+        case "2":
+            
+        case "3":
+            session.terminate()
+            
 
-    if temp == "0":
+    if temp == "_":
+        # varNumber = isActive - 1
         isActive = 0
     else:
-        var.append(temp)
+        variables.append(temp)
         isActive += 1
 
-print(var)
-# start session
-session = WolframLanguageSession(path)
 
-variables = ["x", "y", "z", "m", "a", "b"]
-valuesVar = ["0.9", "1.888", "0.313", "0.12275", "3.15", "1.097"]
-errValues = ["0.5", "0.001", "0.001", "0.00001", "0.11", "0.001"]
 
 # evaluate the multivar funcion and s[] function (to be made dynamic) that generates the elements of g[] later on
 session.evaluate(wlexpr(multiVarFunc))
-session.evaluate(wlexpr("s[k_]:=Abs[D[f[x,y,z,m,a,b], k]]"))
+session.evaluate(wlexpr("s[k_]:=Abs[D[f[x,y], k]]"))
 
 # build g[] from the array of variables dynamically
 sumFunction = "g["
@@ -70,19 +93,8 @@ session.evaluate(wlexpr(sumFunction))
 
 # evaluate g[] function with variables' values
 print(
-    "\n\n\n resultado da soma: {0:.1f}".format(
-        session.evaluate(
-            wlexpr(
-                "g[{0},{1},{2},{3},{4},{5}]".format(
-                    valuesVar[0],
-                    valuesVar[1],
-                    valuesVar[2],
-                    valuesVar[3],
-                    valuesVar[4],
-                    valuesVar[5],
-                )
-            )
-        )
+    "\n\n\n resultado da soma: {0}".format(
+        session.evaluate(wlexpr("g[{0},{1}]".format(valuesVar[0], valuesVar[1])))
     )
 )
 
