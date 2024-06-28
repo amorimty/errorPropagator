@@ -2,19 +2,13 @@ from sympy import *
 import sympy as sympy
 
 multiVarFunc = ""
+diffFuncs = []
 
 variables = []
 variablesValues = []
 variablesErr = []
 variablesNumber = 0
 
-
-teste = symbols("a:10")
-print(teste)
-print(type(teste))
-
-
-print("Enter how many variables you need than type 0:")
 
 isActive = 1
 
@@ -23,21 +17,28 @@ while isActive != 0:
 
     print("Choose an option:\n")
     print("Insert expression --------- 1\n")
-    print("Calculate         --------- 2\n")
-    print("exit              --------- 3\n")
-    temp = input("R.: ")
+    print("insert variables ---------- 2\n")
+    print("Calculate------------------ 3\n")
+    print("exit ---------------------- 4\n")
+    temp = input("")
 
     match temp:
         case "1":
             temp0 = input("\n\nInsert your expression: ")
             multiVarFunc = parse_expr(temp0, evaluate=false)
 
-            for i in multiVarFunc.args:
-                if type(i) == sympy.core.symbol.Symbol:
-                    variables.append(i)
+            for i in multiVarFunc.free_symbols:
+                diffFuncs.append(diff(multiVarFunc, i))
+
         case "2":
-            print("Evaluating function: " + multiVarFunc)
+            if multiVarFunc != "":
+                for i in multiVarFunc.free_symbols:
+                    input("")
+
         case "3":
+            print("Evaluating function: ")
+
+        case "4":
             isActive = 0
 
     # if temp == "_":
