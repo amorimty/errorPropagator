@@ -1,11 +1,15 @@
 from sympy import *
 import sympy as sympy
+import copy
 
 multiVarFunc = ""
 diffFuncs = []
 
 variables = []
 variablesValues = []
+
+varDict = {}
+
 variablesErr = []
 variablesNumber = 0
 
@@ -17,8 +21,8 @@ while isActive != 0:
 
     print("Choose an option:\n")
     print("Insert expression --------- 1\n")
-    print("insert variables ---------- 2\n")
-    print("Calculate------------------ 3\n")
+    print("Insert variables ---------- 2\n")
+    print("Evaluate------------------ 3\n")
     print("exit ---------------------- 4\n")
     temp = input("")
 
@@ -32,11 +36,24 @@ while isActive != 0:
 
         case "2":
             if multiVarFunc != "":
+                varDict.clear()
                 for i in multiVarFunc.free_symbols:
-                    input("")
+                    valor = float(input("Valor para {}: ".format(i)))
+                    varDict.update({i: valor})
 
         case "3":
-            print("Evaluating function: ")
+            multivarFuncCopy = copy.deepcopy(multiVarFunc)
+            diffFuncsCopy = copy.deepcopy(diffFuncs)
+
+            multivarFuncCopy.subs(varDict)
+
+            errCalc = 0
+
+            for i in diffFuncsCopy:
+                i.subs(varDict)
+                errCalc += Abs(i)
+
+            print("Valor encontrado foi: {} +/- {}".format(multivarFuncCopy, errCalc))
 
         case "4":
             isActive = 0
